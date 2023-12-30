@@ -1,0 +1,26 @@
+services:
+  frontend-container:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    tty: true
+  backend-container:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/ruby/
+    command: bash -c "rm -f tmp/pids/server.pid"
+    tty: true
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${USERNAME}
+      MYSQL_PASSWORD: ${USERPASS}
+      MYSQL_ROOT_PASSWORD: ${ROOTPASS}
+    ports:
+      - '3306:3306'
+    command: --default-authentication-plugin=mysql_native_password
