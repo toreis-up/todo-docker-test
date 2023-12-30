@@ -1,3 +1,3 @@
 class Todo < ApplicationRecord
-  validates :title, presense: true
+  validates :title, presence: true
 end
