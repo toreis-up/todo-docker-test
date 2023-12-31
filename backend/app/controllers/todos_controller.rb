@@ -9,7 +9,7 @@ class TodosController < ApplicationController
 
   # GET /todos/:id
   def show
-    render json: { item: @todo}
+    render json: { item: @todo }
   end
 
   # POST /todos
@@ -17,7 +17,7 @@ class TodosController < ApplicationController
     @todo = Todo.new(todo_create_params)
 
     if @todo.save
-      render json: @todo, status: :created, location: @todo
+      render json: { item: @todo }, status: :created, location: @todo
     else
       render json: @todo.errors, status: :unprocessable_entity
     end
@@ -26,7 +26,7 @@ class TodosController < ApplicationController
   # PATCH/PUT /todos/:id
   def update
     if @todo.update(todo_update_params)
-      render json: @todo
+      render json: { item: @todo }
     else
       render json: @todo.errors, status: :unprocessable_entity
     end
