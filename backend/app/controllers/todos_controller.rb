@@ -1,5 +1,5 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: %i[ show update ]
+  before_action :set_todo, only: %i[ show update destroy ]
 
   # GET /todos
   def index
@@ -30,6 +30,11 @@ class TodosController < ApplicationController
     else
       render json: @todo.errors, status: :unprocessable_entity
     end
+  end
+
+  # DELETE /todos/:id
+  def destroy
+    @todo.destroy
   end
 
   private
