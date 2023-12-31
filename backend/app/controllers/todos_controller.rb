@@ -1,5 +1,6 @@
 class TodosController < ApplicationController
   before_action :set_todo, only: %i[ show update destroy ]
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   # GET /todos
   def index
@@ -48,5 +49,10 @@ class TodosController < ApplicationController
 
     def todo_update_params
       params.require(:todo).permit(:isDone)
+    end
+
+    def render_404
+      head :not_found
+      render json: { test: "Not found" }
     end
 end
