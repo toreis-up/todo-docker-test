@@ -53,6 +53,5 @@ class TodosController < ApplicationController
 
     def render_404
       head :not_found
-      render json: { text: "Not found" }
     end
 end
