@@ -1,5 +1,5 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: %i[ show ]
+  before_action :set_todo, only: %i[ show update ]
 
   # GET /todos
   def index
@@ -14,10 +14,19 @@ class TodosController < ApplicationController
 
   # POST /todos
   def create
-    @todo = Todo.new(todo_params)
+    @todo = Todo.new(todo_create_params)
 
     if @todo.save
       render json: @todo, status: :created, location: @todo
+    else
+      render json: @todo.errors, status: :unprocessable_entity
+    end
+  end
+
+  # PATCH/PUT /todos/:id
+  def update
+    if @todo.update(todo_update_params)
+      render json: @todo
     else
       render json: @todo.errors, status: :unprocessable_entity
     end
@@ -28,7 +37,11 @@ class TodosController < ApplicationController
       @todo = Todo.find(params[:id])
     end
 
-    def todo_params
+    def todo_create_params
       params.require(:todo).permit(:title, :detail)
+    end
+
+    def todo_update_params
+      params.require(:todo).permit(:isDone)
     end
 end
