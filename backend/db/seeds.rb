@@ -7,3 +7,14 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+
+todos = [
+  ["テストTODO1", "ディ1テール", false],
+  ["2テストTODO", "ディテー2ル", false],
+  ["テスト3TODO", "デ3ィテール", true]
+]
+
+todos.each do |title, detail, isDone|
+  Todo.create(title: title, detail: detail, isDone: isDone)
+end
