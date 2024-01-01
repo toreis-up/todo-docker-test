@@ -1,39 +1,121 @@
-require 'rails_helper'
+require 'swagger_helper'
 
-describe "Status" do
-  it "GET /todos" do
-    FactoryBot.create_list(:todo, 10)
-    get "/todos"
-    json = JSON.parse(response.body, {:symbolize_names => true})
+RSpec.describe "api/v1/todos", type: :request do
+  path '/todos' do
+    get 'Retrieves all todos' do
+      consumes 'application/json'
+      produces 'application/json'
+      response 200, 'Fetch All Todo' do
+        schema type: :object,
+        properties: {
+          items: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                id: { type: :number },
+                title: { type: :string },
+                detail: { type: :string, nullable: true },
+                isDone: { type: :boolean },
+                created_at: { type: :string, format: :datetime},
+                updated_at: { type: :string, format: :datetime }
+              },
+            }
+          }
+        }
 
-    expect(response.status).to eq(200)
-    expect(json[:items].length).to eq(10)
+        FactoryBot.create_list(:todo, 10)
+        run_test! do |response|
+          json = JSON.parse(response.body, {:symbolize_names => true})
+
+          expect(response.status).to eq(200)
+          expect(json[:items].length).to eq(10)
+        end
+      end
+    end
   end
-  it "GET /todos/:id" do
-    todo = create(:todo, title: "テストTODOの1")
-    get "/todos/#{todo.id}"
-    json = JSON.parse(response.body, {:symbolize_names => true})
-    expect(response.status).to eq(200)
-    expect(json[:item][:title]).to eq(todo["title"])
-  end
-  it "GET /todos/:not_recorded_id" do
-    get "/todos/-1"
+  path '/todos/{id}' do
+    get 'Retrieves todo' do
+      produces 'application/json'
+      consumes 'application/json'
+      parameter name: :id, in: :path, type: :number
+      response 200, 'Fetch Todo' do
+        schema type: :object,
+        properties: {
+          id: { type: :number },
+          title: { type: :string },
+          detail: { type: :string, nullable: true },
+          isDone: { type: :boolean },
+          created_at: { type: :string, format: :datetime},
+          updated_at: { type: :string, format: :datetime }
+        }
+        todo = Todo.create(title: 'TestTodo', detail: 'TestDetail')
+        let(:id) {todo.id}
+        run_test! do |response|
+          json = JSON.parse(response.body, {:symbolize_names => true})
 
-    expect(response.status).to eq(404)
-  end
-  it "PUT /todos/:id" do
-    todo = create(:todo, title: "PUT TEST")
-    get "/todos/#{todo.id}"
-    put "/todos/#{todo.id}", params: { "isDone": true }, as: :json
+          expect(response.status).to eq(200)
+          expect(json[:item][:title]).to eq(todo.title)
+          expect(json[:item][:detail]).to eq(todo.detail)
+          expect(json[:item][:isDonw]).to eq(false)
+        end
+      end
+      response 404, 'Not found' do
+        let(:id) { 'invalid' }
+        run_test! do |response|
+          expect(response.status).to eq(404)
+        end
+      end
+    end
+    patch 'Update todo' do
+      produces 'application/json'
+      consumes 'application/json'
+      parameter name: :id, in: :path, type: :number
+      response 200, 'Update Todo' do
+        schema type: :object,
+        properties: {
+          id: { type: :number },
+          title: { type: :string },
+          detail: { type: :string, nullable: true },
+          isDone: { type: :boolean },
+          created_at: { type: :string, format: :datetime},
+          updated_at: { type: :string, format: :datetime }
+        }
+        todo = Todo.create(title: 'TestTodo', detail: 'TestDetail')
+        let(:id) {todo.id}
+        run_test! do |response|
+          json = JSON.parse(response.body, {:symbolize_names => true})
 
-    expect(response.status).to eq(200)
-    expect(todo.reload.isDone).to eq(true)
-  end
-  it "DELETE /todos/:id" do
-    todo = create(:todo)
-
-    expect { delete "/todos/#{todo.id}" }.to change(Todo, :count).by(-1)
-
-    expect(response.status).to eq(204)
+          expect(response.status).to eq(200)
+          expect(json[:item][:title]).to eq(todo.title)
+          expect(json[:item][:detail]).to eq(todo.detail)
+          expect(json[:item][:isDonw]).to eq(false)
+        end
+      end
+      response 404, 'Not found' do
+      let(:id) { 'invalid' }
+        run_test! do |response|
+          expect(response.status).to eq(404)
+        end
+      end
+    end
+    delete 'Remove todo' do
+      produces 'application/json'
+      consumes 'application/json'
+      parameter name: :id, in: :path, type: :number
+      response 200, 'Remove Todo' do
+        todo = Todo.create(title: 'TestTodo', detail: 'TestDetail')
+        let(:id) {todo.id}
+        run_test! do |response|
+          expect(response.status).to eq(200)
+        end
+      end
+      response 404, 'Not found' do
+        let(:id) { 'invalid' }
+        run_test! do |response|
+          expect(response.status).to eq(404)
+        end
+      end
+    end
   end
 end
