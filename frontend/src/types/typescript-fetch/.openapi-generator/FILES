@@ -1,0 +1,8 @@
+.openapi-generator-ignore
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/TodosGet200Response.ts
+models/TodosGet200ResponseItemsInner.ts
+models/index.ts
+runtime.ts
