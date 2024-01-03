@@ -38,9 +38,77 @@ export interface TodosIdPatchRequest {
 }
 
 /**
+ * DefaultApi - interface
+ * 
+ * @export
+ * @interface DefaultApiInterface
+ */
+export interface DefaultApiInterface {
+    /**
+     * 
+     * @summary Retrieves all todos
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    todosGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TodosGet200Response>>;
+
+    /**
+     * Retrieves all todos
+     */
+    todosGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TodosGet200Response>;
+
+    /**
+     * 
+     * @summary Remove todo
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    todosIdDeleteRaw(requestParameters: TodosIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Remove todo
+     */
+    todosIdDelete(requestParameters: TodosIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Retrieves todo
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    todosIdGetRaw(requestParameters: TodosIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TodosGet200ResponseItemsInner>>;
+
+    /**
+     * Retrieves todo
+     */
+    todosIdGet(requestParameters: TodosIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TodosGet200ResponseItemsInner>;
+
+    /**
+     * 
+     * @summary Update todo
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    todosIdPatchRaw(requestParameters: TodosIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TodosGet200ResponseItemsInner>>;
+
+    /**
+     * Update todo
+     */
+    todosIdPatch(requestParameters: TodosIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TodosGet200ResponseItemsInner>;
+
+}
+
+/**
  * 
  */
-export class DefaultApi extends runtime.BaseAPI {
+export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     /**
      * Retrieves all todos
@@ -131,6 +199,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * Update todo
      */
     async todosIdPatchRaw(requestParameters: TodosIdPatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TodosGet200ResponseItemsInner>> {
+        console.log(requestParameters)
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling todosIdPatch.');
         }
