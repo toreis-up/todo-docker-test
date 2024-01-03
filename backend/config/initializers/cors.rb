@@ -5,19 +5,12 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-# Rails.application.config.middleware.insert_before 0, Rack::Cors do
-#   allow do
-#     origins "example.com"
-#
-#     resource "*",
-#       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-#   end
-# end
-Rails.application.configure do
-  config.action_dispatch.default_headers = {
-    'Access-Control-Allow-Origin' => 'http://localhost:3000',
-    'Access-Control-Request-Methods' => '*',
-    'Access-Control-Request-Headers' => '*'
-  }
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins "http://localhost:3000"
+
+    resource "*",
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  end
 end
