@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "generate-client": "openapi-generator generate -g typescript-fetch -i ../backend/swagger/v1/swagger.yaml -o ./src/types",
+    "generate-client": "openapi-generator generate -g typescript-fetch -i ../backend/swagger/v1/swagger.yaml -o ./src/types --additional-properties=modelPropertyNaming=camelCase,supportsES6=true,withInterfaces=true,typescriptThreePlus=true",
     "sb": "storybook dev --port 6006"
   },
   "dependencies": {
